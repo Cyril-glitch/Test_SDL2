@@ -3,6 +3,50 @@
 #include <SDL2/SDL.h>
 #include "SDL2/SDL_image.h"
 
+SDL_Texture* LoadTexture(SDL_Renderer *renderer,char* path)
+{
+	SDL_Texture *texture = NULL;
+	SDL_Surface *loadedSurface = IMG_Load(path);
+
+	if(loadedSurface == NULL )
+	{
+		printf("IMG %s can't be loaded error . %s\n",path,IMG_GetError());
+		return NULL;
+	}
+	else
+	{
+		texture = SDL_CreateTextureFromSurface(renderer,loadedSurface); 
+		
+		if(texture == NULL)
+		{
+		        printf("texture From %s can't be creat error . %s\n",path,IMG_GetError());
+			return NULL;
+		}
+		else
+		{
+			SDL_FreeSurface(loadedSurface);
+			loadedSurface = NULL;
+		}
+	}
+	return texture;
+}
+
+SDL_Texture* QuickLoadTexture(SDL_Renderer *renderer,char* path)
+{
+	SDL_Texture *texture = NULL;
+	texture = IMG_LoadTexture(renderer,path);
+
+
+	if(texture == NULL)
+	{
+		printf("SDL can't creat texture From %s error : %s\n",path,IMG_GetError());
+		return NULL;
+	}
+
+	return texture;
+}
+
+
 int main( int agrc , const char argv [])
 {
 	int true = 1;
