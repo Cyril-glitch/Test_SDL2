@@ -1,3 +1,3 @@
-gcc src/main.c -Iinclude -Llib -lSDL2main -lSDL2 -lSDL2_image -o bin/programme.exe
+gcc src/main.c  src/cc2d_graphics.c -Iinclude -Llib -lSDL2main -lSDL2 -lSDL2_image -o bin/programme.exe
 cd ./bin
-./monprograme.exe
+./programme.exe
