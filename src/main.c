@@ -68,7 +68,7 @@ int main( int agrc , const char argv [])
 	"Test window",
 	SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED,
-	1000,
+	2000,
 	1000,
 	SDL_WINDOW_SHOWN
 	);
@@ -102,7 +102,17 @@ int main( int agrc , const char argv [])
 
 
 //ici on créer la game loop est on determine sa condition de sortie , ici la condition sera que le system renvoie l'evenement quit
-//puis on nettoie et on affiche de renderer 
+//puis on nettoie et on affiche de renderer
+
+
+SDL_Texture *texplanet = QuickLoadTexture(renderer,"img/planet.png");
+
+int texplanetW , texplanetH;
+int planetx = 10 , planety = 10  ;
+
+SDL_QueryTexture (texplanet ,NULL,NULL,&texplanetW,&texplanetH);
+SDL_Rect planetDstRect = {planetx,planety,texplanetW,texplanetH};
+
 
 	while(true)
 	{
@@ -115,14 +125,15 @@ int main( int agrc , const char argv [])
 			}
 		}
 
-
 	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer , texplanet ,NULL ,&planetDstRect);
 	SDL_RenderPresent(renderer);
 
 	}
 
 //etape finale on libere l'espace memoire du renderer et on quitte proprement la fenetre
 	SDL_DestroyRenderer(renderer);
+	SDL_DestroyTexture(texplanet);
 	SDL_DestroyWindow(window);
 	IMG_Quit();
 	SDL_Quit();									       
