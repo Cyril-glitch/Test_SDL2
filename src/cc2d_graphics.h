@@ -13,7 +13,10 @@
 
 int ccd2_init();
 
-int ccd2_init_wimdow(char* titre, int w , int h);
+
+void ccd2_close();
+
+int ccd2_init_window(char* titre, int w , int h);
 
 SDL_Texture* LoadTexture(SDL_Renderer *renderer,char* path);
 

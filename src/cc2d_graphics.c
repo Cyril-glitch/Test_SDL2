@@ -25,6 +25,14 @@ int ccd2_init()
 		return 0;
 	}
 }
+
+void ccd2_close()
+{
+	IMG_Quit();
+	SDL_Quit();
+}
+
+
 int ccd2_init_window(char* titre ,int w ,int h)
 {
 //ici on créer la fenetre : son nom ça taille ça position etc...
@@ -107,3 +115,6 @@ SDL_Texture* QuickLoadTexture(SDL_Renderer *renderer,char* path)
 
 	return texture;
 }
+
+
+
