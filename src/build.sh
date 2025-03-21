@@ -1,3 +1,4 @@
+cd ..
 cd bin
 rm programme.exe
 cd ..

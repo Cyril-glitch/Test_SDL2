@@ -10,24 +10,28 @@ int main( int agrc , const char argv [])
 {
 	int true = 1;
 
-	ccd2_init();
+	SDL_Window* window = NULL;
+	SDL_Renderer* renderer = NULL;
 
-	ccd2_init_window("window test" ,2000,1000);
+
+	cc2d_init();
+
+
+	cc2d_init_window("window test" ,2000,1000,renderer,window);
 
 
 	while(true)
 	{
-		SDL_Event event;
-		if(SDL_PollEvent(&event))
+		
+		if(cc2d_beginDraw(renderer) == 0 )
 		{
-			if(event.type == SDL_QUIT)
-			{
-				return 0 ;
-			}
+			break;
 		}
+		
+		cc2d_enddraw(renderer);
 
 
 	}
 
-	ccd2_close();
+	cc2d_close(window,renderer);
 }

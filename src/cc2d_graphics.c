@@ -6,10 +6,10 @@
 
 #include "cc2d_graphics.h"
 
-int ccd2_init()
+int cc2d_init()
 {
 
-//ici on initialise toutes les fonction de SDL en entrant le flag "EVERYTHING"
+	//ici on initialise toutes les fonction de SDL en entrant le flag "EVERYTHING"
 
 	printf("initialisation la librairie SDL...\n");
 
@@ -26,25 +26,49 @@ int ccd2_init()
 	}
 }
 
-void ccd2_close()
+int cc2d_beginDraw(SDL_Renderer* renderer)
 {
+	SDL_Event event;
+	if(SDL_PollEvent(&event))
+	{
+		if(event.type == SDL_QUIT)
+		{
+			return 0 ;
+		}
+	}
+	SDL_RenderClear(renderer);
+
+	return 1;
+}
+
+void cc2d_enddraw(SDL_Renderer* renderer)
+{
+	SDL_RenderPresent(renderer);
+}
+
+void cc2d_close(SDL_Renderer* renderer,SDL_Window* window)
+{
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 	IMG_Quit();
 	SDL_Quit();
+
+	printf("fermeture du programme...\n");
 }
 
 
-int ccd2_init_window(char* titre ,int w ,int h)
+int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer* renderer,SDL_Window* window)
 {
-//ici on créer la fenetre : son nom ça taille ça position etc...
+	//ici on créer la fenetre : son nom ça taille ça position etc...
 
-	SDL_Window *window = SDL_CreateWindow(
-	"Test window",
-	SDL_WINDOWPOS_CENTERED,
-	SDL_WINDOWPOS_CENTERED,
-	w,
-	h,
-	SDL_WINDOW_SHOWN
-	);
+	 window = SDL_CreateWindow(
+			"Test window",
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			w,
+			h,
+			SDL_WINDOW_SHOWN
+			);
 
 	if(window == NULL)
 	{
@@ -52,9 +76,9 @@ int ccd2_init_window(char* titre ,int w ,int h)
 		return-1;
 	}
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	 renderer = SDL_CreateRenderer(window, -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-	
+
 	if(renderer == NULL)
 	{
 		printf("impossible de créer le renderer  %s\n",SDL_GetError());
@@ -73,6 +97,7 @@ int ccd2_init_window(char* titre ,int w ,int h)
 	}
 }
 
+
 SDL_Texture* LoadTexture(SDL_Renderer *renderer,char* path)
 {
 	SDL_Texture *texture = NULL;
@@ -86,10 +111,10 @@ SDL_Texture* LoadTexture(SDL_Renderer *renderer,char* path)
 	else
 	{
 		texture = SDL_CreateTextureFromSurface(renderer,loadedSurface); 
-		
+
 		if(texture == NULL)
 		{
-		        printf("texture From %s can't be creat error . %s\n",path,IMG_GetError());
+			printf("texture From %s can't be creat error . %s\n",path,IMG_GetError());
 			return NULL;
 		}
 		else
@@ -112,9 +137,7 @@ SDL_Texture* QuickLoadTexture(SDL_Renderer *renderer,char* path)
 		printf("SDL can't creat texture From %s error : %s\n",path,IMG_GetError());
 		return NULL;
 	}
+	SDL_QueryTexture(texture,NULL,NULL);
 
 	return texture;
 }
-
-
-

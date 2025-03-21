@@ -11,12 +11,15 @@
 
 #endif
 
-int ccd2_init();
+int cc2d_init();
 
+void cc2d_close();
 
-void ccd2_close();
+int cc2d_beginDraw(SDL_Renderer* renderer);
 
-int ccd2_init_window(char* titre, int w , int h);
+void cc2d_enddraw(SDL_Renderer* renderer);
+
+int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer* renderer,SDL_Window* window);
 
 SDL_Texture* LoadTexture(SDL_Renderer *renderer,char* path);
 
