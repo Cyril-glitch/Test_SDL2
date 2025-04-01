@@ -140,7 +140,7 @@ SDL_Texture* quickLoadTexture(SDL_Renderer *renderer,char* path)
 	return texture;
 }
 
-SDL_Texture* cc2d_newImage(SDL_Renderer *renderer,const char* path,int texW,int texH)
+SDL_Texture* cc2d_LoadImage(SDL_Renderer *renderer,const char* path)
 {
 	SDL_Texture* texture = IMG_LoadTexture(renderer,path);
 
@@ -150,27 +150,18 @@ SDL_Texture* cc2d_newImage(SDL_Renderer *renderer,const char* path,int texW,int 
 		printf("SDL can't creat texture From %s error : %s\n",path,IMG_GetError());
 		return NULL;
 	}
-	SDL_QueryTexture(texture,NULL,NULL,&texW,&texH);
 
 	return texture;
 
 }
+//on a besoin d'une fonction qui defini le rectangle de destinantion puis l'affiche
 
-int cc2d_drawImage(SDL_Texture* tex,SDL_Renderer* renderer,int texX, SDL_texture* tex->w , SDL_texture* tex->y)
+void cc2d_drawImage(SDL_Texture* texture ,SDL_Renderer* renderer,int x, int y ,int w,int h )
 {
-	SDL_Rect* textDstRect(texX,TexY)
-	SDL_RenderCopy(texture,renderer,NULL,texDstRect)
 
+	SDL_Rect rectDst = {x,y,w,h};
+	SDL_RenderCopy(renderer,texture,NULL,&rectDst);
 }
-
-
-
-
-
-
-
-
-
 
 
 
