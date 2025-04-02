@@ -140,7 +140,7 @@ SDL_Texture* quickLoadTexture(SDL_Renderer *renderer,char* path)
 	return texture;
 }
 
-SDL_Texture* cc2d_LoadImage(SDL_Renderer *renderer,const char* path)
+SDL_Texture* cc2d_loadImage(SDL_Renderer *renderer,const char* path)
 {
 	SDL_Texture* texture = IMG_LoadTexture(renderer,path);
 
