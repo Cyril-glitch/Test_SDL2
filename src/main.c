@@ -15,19 +15,7 @@ int main( int agrc , const char argv [])
 
 
 	cc2d_init();
-	cc2d_init_window("window test" ,2000,1000,renderer,window);
-	if(window == NULL)
-	{
-
-		printf("window  null\n");
-		return 0;
-	}
-	if(renderer == NULL)
-	{
-		printf("renderer null\n");
-		return 0;
-	}
-
+	cc2d_init_window("window test" ,2000,1000,&renderer,&window);
 	SDL_Texture* texplanet = cc2d_loadImage(renderer,"../img/planet.png");
 
 	while(true)

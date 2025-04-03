@@ -57,11 +57,14 @@ void cc2d_close(SDL_Renderer* renderer,SDL_Window* window)
 }
 
 
-int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer* renderer,SDL_Window* window)
+int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Window** window)
 {
-	//ici on créer la fenetre : son nom ça taille ça position etc...
 
-	 window = SDL_CreateWindow(
+//window = l'adresse du pointeur 
+//*window = la valeur du premier pointeur SDL_window *window
+//**window = la valeur pointé par le premier pointeur (les donnèes de la struct)
+
+	*window = SDL_CreateWindow(
 			"Test window",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
@@ -70,16 +73,16 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer* renderer,SDL_Window
 			SDL_WINDOW_SHOWN
 			);
 
-	if(window == NULL)
+	if(*window == NULL)
 	{
 		printf("impossible de créer la fenetre %s\n",SDL_GetError());
 		return-1;
 	}
 
-	 renderer = SDL_CreateRenderer(window, -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	 *renderer = SDL_CreateRenderer(*window, -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 
-	if(renderer == NULL)
+	if(*renderer == NULL)
 	{
 		printf("impossible de créer le renderer  %s\n",SDL_GetError());
 		return-1;
@@ -148,7 +151,9 @@ SDL_Texture* cc2d_loadImage(SDL_Renderer *renderer,const char* path)
 	if(texture == NULL)
 	{
 		printf("SDL can't creat texture From %s error : %s\n",path,IMG_GetError());
-		return NULL;
+
+
+
 	}
 
 	return texture;
