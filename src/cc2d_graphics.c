@@ -98,6 +98,8 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 		}
 
 	}
+
+	SDL_SetRenderDrawBlendMode(*renderer,SDL_BLENDMODE_BLEND);
 }
 
 
@@ -161,13 +163,27 @@ SDL_Texture* cc2d_loadImage(SDL_Renderer *renderer,const char* path)
 }
 //on a besoin d'une fonction qui defini le rectangle de destinantion puis l'affiche
 
-void cc2d_drawImage(SDL_Texture* texture ,SDL_Renderer* renderer,int x, int y ,int w,int h )
+void cc2d_drawImage(SDL_Texture* texture ,SDL_Renderer* renderer,int x, int y ,int w,int h,int a )
 {
 
 	SDL_Rect rectDst = {x,y,w,h};
+	SDL_SetTextureAlphaMod(texture,a);
 	SDL_RenderCopy(renderer,texture,NULL,&rectDst);
 }
 
+void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w , int h)
+{
+	SDL_Rect rect = {x,y,w,h}; 
+
+	if(strcmp(mode,"line") == 0)
+	{
+		SDL_RenderDrawRects(renderer,&rect,1);
+	}
+	else if(strcmp(mode,"fill") == 0)
+	{
+		SDL_RenderFillRects(renderer,&rect,1);
+	}
+}
 
 
 
