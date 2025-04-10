@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include "SDL2/SDL_image.h"
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "cc2d_graphics.h"
 
 
@@ -18,6 +19,10 @@ int main( int agrc , const char argv [])
 	cc2d_init();
 	cc2d_init_window("window test" ,2000,1000,&renderer,&window);
 	SDL_Texture* texplanet = cc2d_loadImage(renderer,"../img/planet.png");
+
+	TTF_Font* font = cc2d_loadFont("../font/PixelMaster.ttf",100);
+	SDL_Texture* titre = cc2d_textureTexte("Hello World !",renderer,font,100,100,255,255,255,255);
+
 
 	while(true)
 	{
@@ -39,7 +44,10 @@ int main( int agrc , const char argv [])
 		SDL_SetRenderDrawColor(renderer,0,255,255,122); 
 		cc2d_drawRect(renderer,"fill",1100,650,100,100);
 		
-		cc2d_drawImage(texplanet,renderer,10,10,150,150,255);
+		cc2d_Draw(texplanet,renderer,10,10,150,150,255);
+		cc2d_Draw(titre,renderer,300,500,200,100,255);
+
+		
 
 		cc2d_enddraw(renderer);//affiche le resultat
 

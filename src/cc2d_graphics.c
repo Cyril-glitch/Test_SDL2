@@ -2,9 +2,11 @@
 #include <stdio.h>
 
 #include <SDL2/SDL.h>
-#include "SDL2/SDL_image.h"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "cc2d_graphics.h"
+
 
 int cc2d_init()
 {
@@ -98,6 +100,17 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 		}
 
 	}
+	
+	if(TTF_Init() == -1)
+	{
+		printf("impossible d'intialiser la TTF : TTF error : %s\n",TTF_GetError());
+		return -1;
+
+	}
+	else
+	{
+		printf("TTF initialisée avec succés !\n");
+	}
 
 	SDL_SetRenderDrawBlendMode(*renderer,SDL_BLENDMODE_BLEND);
 }
@@ -163,7 +176,7 @@ SDL_Texture* cc2d_loadImage(SDL_Renderer *renderer,const char* path)
 }
 //on a besoin d'une fonction qui defini le rectangle de destinantion puis l'affiche
 
-void cc2d_drawImage(SDL_Texture* texture ,SDL_Renderer* renderer,int x, int y ,int w,int h,int a )
+void cc2d_Draw(SDL_Texture* texture ,SDL_Renderer* renderer,int x, int y ,int w,int h,int a )
 {
 
 	SDL_Rect rectDst = {x,y,w,h};
@@ -184,6 +197,65 @@ void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w
 		SDL_RenderFillRects(renderer,&rect,1);
 	}
 }
+
+TTF_Font* cc2d_loadFont(const char* path ,int ftsize)
+{
+	TTF_Font* font = TTF_OpenFont(path,ftsize);
+
+	if(font == NULL)
+	{
+		printf("TTF can't creat font From %s error : %s\n",path,TTF_GetError());
+		return NULL;
+
+	}
+
+	return font;
+}
+	
+SDL_Texture* cc2d_textureTexte(char* texte ,SDL_Renderer* renderer,TTF_Font* font,int x,int y,int r,int g,int b,int a)
+{
+
+	SDL_Color color = {r,g,b,a};
+	SDL_Texture* texture = NULL;
+
+
+	SDL_Surface* surface = TTF_RenderUTF8_Solid(font,texte,color);
+	
+	if(surface == NULL)
+	{
+		printf(" can't load surface error: %s\n",SDL_GetError());
+		return NULL;
+	}
+	else
+	{
+		texture = SDL_CreateTextureFromSurface(renderer,surface);
+
+		if(texture == NULL)
+		{
+			printf(" can't create texture from surface error: %s\n",SDL_GetError());
+			return NULL;
+		}
+	
+	}
+	SDL_FreeSurface(surface);
+
+	return texture;
+}
+
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
 
 
 
