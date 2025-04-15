@@ -1,16 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#ifndef CC2DD_GRAPHICS_H 
+#define CC2D_GRAPHICS_H
 
 
-#ifndef CCD2_GRAPHICS_H 
-#define CCD2_GRAPHICS_H
-
-
-#endif
+void loadBar();
 
 int cc2d_init();
 
@@ -32,6 +24,4 @@ SDL_Texture* quickLoadTexture(SDL_Renderer *renderer,char* path);
 
 void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w , int h);
 
-TTF_Font* cc2d_loadFont(const char* path ,int ftsize);
-
-SDL_Texture* cc2d_textureTexte(char* texte ,SDL_Renderer* renderer,TTF_Font* font,int x,int y,int r,int g,int b,int a);
+#endif

@@ -4,26 +4,39 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-
+#include <unistd.h>
 #include "cc2d_graphics.h"
 
+void loadBar()
+{
+	// Boucle pour afficher la barre de chargement
+    for (int i = 0; i < 10; i++) 
+    {
+        // Affiche le caractère en vert clair
+        printf("\033[1;92m▓\033[0m");  // \033[1;92m est pour le vert clair (bright green)
+        fflush(stdout);  // Assure que le caractère s'affiche sans délai
+        usleep(100000);  // Pause de 100000 microsecondes (0,1 seconde)
+    }
+	printf("\n");
+}
 
 int cc2d_init()
 {
 
 	//ici on initialise toutes les fonction de SDL en entrant le flag "EVERYTHING"
 
-	printf("initialisation la librairie SDL...\n");
+	printf("🛠️ Initialisation la librairie SDL...");
+	loadBar();
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 
-		printf("Impossible d'initialiserSDL \n");
+		printf("⛔ Impossible d'initialiserSDL \n");
 		return -1;
 	}
 	else
 	{
-		printf("SDL initialisée avec succés !\n");
+		printf("✅ SDL initialisée avec succés !\n");
 		return 0;
 	}
 }
@@ -55,7 +68,7 @@ void cc2d_close(SDL_Renderer* renderer,SDL_Window* window)
 	IMG_Quit();
 	SDL_Quit();
 
-	printf("fermeture du programme...\n");
+	printf("🔒 Fermeture du programme\n");
 }
 
 
@@ -77,7 +90,7 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 
 	if(*window == NULL)
 	{
-		printf("impossible de créer la fenetre %s\n",SDL_GetError());
+		printf("⛔ Impossible de créer la fenetre %s\n",SDL_GetError());
 		return-1;
 	}
 
@@ -86,7 +99,7 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 
 	if(*renderer == NULL)
 	{
-		printf("impossible de créer le renderer  %s\n",SDL_GetError());
+		printf("⛔ Impossible de créer le renderer  %s\n",SDL_GetError());
 		return-1;
 	}
 	else
@@ -95,7 +108,7 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 
 		if(!(IMG_Init(imgFlags) & imgFlags))
 		{
-			printf("impossible d'initialiser SDL_Image : SDL_Image error : %s\n",SDL_GetError());
+			printf("⛔ Impossible d'initialiser SDL_Image : SDL_Image error : %s\n",SDL_GetError());
 			return -1;
 		}
 
@@ -103,13 +116,13 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 	
 	if(TTF_Init() == -1)
 	{
-		printf("impossible d'intialiser la TTF : TTF error : %s\n",TTF_GetError());
+		printf("⛔ Impossible d'intialiser la TTF : TTF error : %s\n",TTF_GetError());
 		return -1;
 
 	}
 	else
 	{
-		printf("TTF initialisée avec succés !\n");
+		printf("✅ TTF initialisée avec succés !\n");
 	}
 
 	SDL_SetRenderDrawBlendMode(*renderer,SDL_BLENDMODE_BLEND);
@@ -198,49 +211,6 @@ void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w
 	}
 }
 
-TTF_Font* cc2d_loadFont(const char* path ,int ftsize)
-{
-	TTF_Font* font = TTF_OpenFont(path,ftsize);
-
-	if(font == NULL)
-	{
-		printf("TTF can't creat font From %s error : %s\n",path,TTF_GetError());
-		return NULL;
-
-	}
-
-	return font;
-}
-	
-SDL_Texture* cc2d_textureTexte(char* texte ,SDL_Renderer* renderer,TTF_Font* font,int x,int y,int r,int g,int b,int a)
-{
-
-	SDL_Color color = {r,g,b,a};
-	SDL_Texture* texture = NULL;
-
-
-	SDL_Surface* surface = TTF_RenderUTF8_Solid(font,texte,color);
-	
-	if(surface == NULL)
-	{
-		printf(" can't load surface error: %s\n",SDL_GetError());
-		return NULL;
-	}
-	else
-	{
-		texture = SDL_CreateTextureFromSurface(renderer,surface);
-
-		if(texture == NULL)
-		{
-			printf(" can't create texture from surface error: %s\n",SDL_GetError());
-			return NULL;
-		}
-	
-	}
-	SDL_FreeSurface(surface);
-
-	return texture;
-}
 
 	
 
