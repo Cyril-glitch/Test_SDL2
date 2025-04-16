@@ -23,6 +23,7 @@ int main( int agrc , const char argv [])
 
 	TTF_Font* font = cc2d_loadFont("../font/PixelMaster.ttf",100);
 	SDL_Texture* titre = cc2d_textureTexte("Hello World !",renderer,font,100,100,255,255,255,255);
+	int x = 0;
 
 
 	while(true)
@@ -45,8 +46,14 @@ int main( int agrc , const char argv [])
 		SDL_SetRenderDrawColor(renderer,0,255,255,122); 
 		cc2d_drawRect(renderer,"fill",1100,650,100,100);
 		
-		cc2d_Draw(texplanet,renderer,10,10,150,150,255);
+		cc2d_Draw(texplanet,renderer,x,10,150,150,255);
 		cc2d_Draw(titre,renderer,300,500,200,100,255);
+
+		const Uint8* state = SDL_GetKeyboardState(NULL);
+		if(state[SDL_SCANCODE_D])
+		{
+			x++;
+		}
 
 		
 
