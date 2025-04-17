@@ -26,7 +26,7 @@ int main( int agrc , const char argv [])
 	int yp = 0;
 
 	//initialisation font et textes
-	TTF_Font* font = cc2d_loadFont("../font/PixelMaster.ttf",100);
+	TTF_Font* font = cc2d_loadFont("../font/PixelMaster.ttf",50);
 	SDL_Texture* titre = cc2d_textureTexte("Hello World !",renderer,font,100,100,255,255,255,255);
 	
 
@@ -34,6 +34,8 @@ int main( int agrc , const char argv [])
 	//depart de la gameloop
 	while(true)
 	{
+		Uint32 now = SDL_GetTicks();
+		float current  = now / 1000;
 		
 		SDL_SetRenderDrawColor(renderer,0,0,10,255);        //initialise le render en bleu
 		if(cc2d_beginDraw(renderer) == 0 )                  //efface le renderer
@@ -49,6 +51,10 @@ int main( int agrc , const char argv [])
 		cc2d_Draw(texplanet,renderer,xp,yp,150,150,255);     //affiche la planet 
 		cc2d_Draw(titre,renderer,300,500,200,100,255);
 
+		char timeF[100];
+		sprintf(timeF,"%.3f",current); 
+	        SDL_Texture* time = cc2d_textureTexte(timeF,renderer,font,100,100,255,255,255,255);
+		cc2d_Draw(time,renderer,1900,0,75,100,255);
 
 		if(cc2d_downKey(SDL_SCANCODE_D))
 		{
