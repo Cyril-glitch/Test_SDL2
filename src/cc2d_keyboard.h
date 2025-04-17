@@ -7,3 +7,6 @@
 #include "cc2d_font.h"
 
 #endif
+
+
+int cc2d_downKey(SDL_Scancode key);

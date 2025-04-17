@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include "cc2d_graphics.h"
 #include "cc2d_font.h"
+#include "cc2d_keyboard.h"
 
 
 int main( int agrc , const char argv [])
@@ -49,13 +50,19 @@ int main( int agrc , const char argv [])
 		cc2d_Draw(texplanet,renderer,x,10,150,150,255);
 		cc2d_Draw(titre,renderer,300,500,200,100,255);
 
-		const Uint8* state = SDL_GetKeyboardState(NULL);
+/*		const Uint8* state = SDL_GetKeyboardState(NULL);
 		if(state[SDL_SCANCODE_D])
 		{
 			x++;
 		}
 
-		
+*/
+
+
+		if(cc2d_downKey(SDL_SCANCODE_D))
+		{
+			x++;
+		}
 
 		cc2d_enddraw(renderer);//affiche le resultat
 
