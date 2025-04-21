@@ -30,12 +30,21 @@ int main( int agrc , const char argv [])
 	SDL_Texture* titre = cc2d_textureTexte("Hello World !",renderer,font,100,100,255,255,255,255);
 	
 
+	//initialisatioon des valeurs de temps
+	Uint32 frameStart = 0;
+	float deltaTime = 0 ;
+	float current = 0 ;
 
 	//depart de la gameloop
 	while(true)
 	{
-		Uint32 now = SDL_GetTicks();
-		float current  = now / 1000;
+
+		 //recupération du delta Time
+		 Uint32 now = SDL_GetTicks();
+		 current  = now / 1000;		
+		 deltaTime = (now- frameStart) / 1000.0;
+		 frameStart = now ;
+
 		
 		SDL_SetRenderDrawColor(renderer,0,0,10,255);        //initialise le render en bleu
 		if(cc2d_beginDraw(renderer) == 0 )                  //efface le renderer
@@ -50,11 +59,20 @@ int main( int agrc , const char argv [])
 
 		cc2d_Draw(texplanet,renderer,xp,yp,150,150,255);     //affiche la planet 
 		cc2d_Draw(titre,renderer,300,500,200,100,255);
-
+		
+		//affichage timer 
 		char timeF[100];
 		sprintf(timeF,"%.3f",current); 
 	        SDL_Texture* time = cc2d_textureTexte(timeF,renderer,font,100,100,255,255,255,255);
 		cc2d_Draw(time,renderer,1900,0,75,100,255);
+
+		//affichage delta time
+		char timeDt[100];
+		sprintf(timeDt,"%.3f",deltaTime); 
+	        SDL_Texture* tex_DTime = cc2d_textureTexte(timeDt,renderer,font,100,100,255,255,255,255);
+		cc2d_Draw(tex_DTime,renderer,1900,100,75,100,255);
+
+
 
 		if(cc2d_downKey(SDL_SCANCODE_D))
 		{
