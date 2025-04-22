@@ -227,6 +227,27 @@ void cc2d_fpsLimiter(Uint32 frameStart , int fps)
 	}
 }
 
+void cc2d_Precise_FpsLimiter(Uint64 precise_fst , int fps)
+{
+	//Nombre de ticks emis pendant une frame
+	Uint64 frameTime = SDL_GetPerformanceCounter() - precise_fst;
+
+	//convertie en seconde
+	double sFrameTime = (double)frameTime / SDL_GetPerformanceFrequency();
+
+	//si le temps écoulé est inferieur 1000 miliseconde (une sec ) / 60;
+	if(sFrameTime < (1000.000000/ fps ))
+	{
+		//alors le delay d'attentes pour afficher une image et limiter a 60fps =
+		Uint64 delay = (1000.000000/ fps ) - sFrameTime;
+		if(delay > 0 )
+		{
+			SDL_Delay(delay);
+		}
+	}
+}
+
+
 
 	
 

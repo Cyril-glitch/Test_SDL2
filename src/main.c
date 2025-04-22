@@ -35,6 +35,11 @@ int main( int agrc , const char argv [])
 	float deltaTime = 0 ;
 	float elapsedTime = 0 ;
 
+	//initialisation des valeurs precises
+	Uint64 precise_fst = 0;
+	double precise_dt = 0;
+	double precise_elapse = 0 ;
+
 	//depart de la gameloop
 	while(true)
 	{
@@ -44,6 +49,12 @@ int main( int agrc , const char argv [])
 		 elapsedTime  = now / 1000;		
 		 deltaTime = (now- frameStart) / 1000.0;
 		 frameStart = now ;
+
+		 //recuperation des valeurs precises
+		 Uint64 P_now = SDL_GetPerformanceCounter();
+		 precise_elapse = (double)P_now / SDL_GetPerformanceFrequency();
+		 precise_dt = (double)(P_now - precise_fst) / SDL_GetPerformanceFrequency();
+		 precise_fst = P_now ;
 
 		
 		SDL_SetRenderDrawColor(renderer,0,0,10,255);        //initialise le render en bleu
@@ -62,15 +73,46 @@ int main( int agrc , const char argv [])
 		
 		//affichage timer 
 		char elpdTime[100];
-		sprintf(elpdTime,"%.3f",elapsedTime); 
-	        SDL_Texture* texElapsedTime = cc2d_textureTexte(elpdTime,renderer,font,100,100,255,255,255,255);
-		cc2d_Draw(texElapsedTime,renderer,1900,0,75,100,255);
+		sprintf(elpdTime,"TIME : %.6f",elapsedTime); 
+	        SDL_Texture* texElapsedTime = cc2d_textureTexte(elpdTime,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(texElapsedTime,renderer,1700,0,150,100,255);
 
 		//affichage delta time
 		char timeDt[100];
-		sprintf(timeDt,"%.3f",deltaTime); 
-	        SDL_Texture* tex_DTime = cc2d_textureTexte(timeDt,renderer,font,100,100,255,255,255,255);
-		cc2d_Draw(tex_DTime,renderer,1900,100,75,100,255);
+		sprintf(timeDt,"DELTA : %.6f",deltaTime); 
+	        SDL_Texture* tex_DTime = cc2d_textureTexte(timeDt,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_DTime,renderer,1700,100,150,100,255);
+		
+                //affichage des fps
+		char fps[100];
+		sprintf(fps,"FPS : %.6f", 1 / deltaTime ); 
+	        SDL_Texture* tex_fps = cc2d_textureTexte(fps,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_fps,renderer,1700,200,150,100,255);
+                
+		//affichage precis du timer 
+		char P_elapse[100];
+		sprintf(P_elapse,"TIME : %.6f",precise_elapse); 
+	        SDL_Texture* P_tex_ElapsedTime = cc2d_textureTexte(P_elapse,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(P_tex_ElapsedTime,renderer,1700,300,150,100,255);
+
+
+                //affichage precis du  delta time
+		char P_Dt[100];
+		sprintf(P_Dt,"DELTA : %.6f",precise_dt); 
+	        SDL_Texture* tex_P_Dt = cc2d_textureTexte(P_Dt,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_P_Dt,renderer,1700,400,150,100,255);
+		
+                //affichage precis des fps
+		char P_fps[100];
+		sprintf(P_fps,"FPS : %.6f", 1 / precise_dt ); 
+	        SDL_Texture* tex_P_fps = cc2d_textureTexte(P_fps,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_P_fps,renderer,1700,500,150,100,255);
+
+                
+	
+
+
+
 
 
 
@@ -92,7 +134,8 @@ int main( int agrc , const char argv [])
 		}
 
 		cc2d_enddraw(renderer);    //affiche le resultat
-		cc2d_fpsLimiter(frameStart , 60);
+		/*cc2d_fpsLimiter(frameStart , 60);*/
+		cc2d_Precise_FpsLimiter(precise_fst , 60);
 
 
 	}

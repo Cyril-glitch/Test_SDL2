@@ -26,4 +26,7 @@ void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w
 
 void cc2d_fpsLimiter(Uint32 frameStart , int fps);
 
+void cc2d_Precise_FpsLimiter(Uint64 precise_fst , int fps);
+
+
 #endif
