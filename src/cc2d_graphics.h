@@ -24,4 +24,6 @@ SDL_Texture* quickLoadTexture(SDL_Renderer *renderer,char* path);
 
 void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w , int h);
 
+void cc2d_fpsLimiter(Uint32 frameStart , int fps);
+
 #endif

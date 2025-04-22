@@ -210,6 +210,22 @@ void cc2d_drawRect(SDL_Renderer* renderer,const char* mode , int x ,int y ,int w
 		SDL_RenderFillRects(renderer,&rect,1);
 	}
 }
+void cc2d_fpsLimiter(Uint32 frameStart , int fps)
+{
+	//le temps écoulé pour afficher une image
+	Uint32 frameTime = SDL_GetTicks() - frameStart;
+
+	//si le temps écoulé est inferieur 1000 miliseconde (une sec ) / 60;
+	if(frameTime < (1000.0 / fps ))
+	{
+		//alors le delay d'attentes pour afficher une image et limiter a 60fps =
+		Uint32 delay = (1000.0 / fps ) - frameTime;
+		if(delay > 0 )
+		{
+			SDL_Delay(delay);
+		}
+	}
+}
 
 
 	

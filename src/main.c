@@ -33,7 +33,7 @@ int main( int agrc , const char argv [])
 	//initialisatioon des valeurs de temps
 	Uint32 frameStart = 0;
 	float deltaTime = 0 ;
-	float current = 0 ;
+	float elapsedTime = 0 ;
 
 	//depart de la gameloop
 	while(true)
@@ -41,7 +41,7 @@ int main( int agrc , const char argv [])
 
 		 //recupération du delta Time
 		 Uint32 now = SDL_GetTicks();
-		 current  = now / 1000;		
+		 elapsedTime  = now / 1000;		
 		 deltaTime = (now- frameStart) / 1000.0;
 		 frameStart = now ;
 
@@ -61,10 +61,10 @@ int main( int agrc , const char argv [])
 		cc2d_Draw(titre,renderer,300,500,200,100,255);
 		
 		//affichage timer 
-		char timeF[100];
-		sprintf(timeF,"%.3f",current); 
-	        SDL_Texture* time = cc2d_textureTexte(timeF,renderer,font,100,100,255,255,255,255);
-		cc2d_Draw(time,renderer,1900,0,75,100,255);
+		char elpdTime[100];
+		sprintf(elpdTime,"%.3f",elapsedTime); 
+	        SDL_Texture* texElapsedTime = cc2d_textureTexte(elpdTime,renderer,font,100,100,255,255,255,255);
+		cc2d_Draw(texElapsedTime,renderer,1900,0,75,100,255);
 
 		//affichage delta time
 		char timeDt[100];
@@ -92,6 +92,7 @@ int main( int agrc , const char argv [])
 		}
 
 		cc2d_enddraw(renderer);    //affiche le resultat
+		cc2d_fpsLimiter(frameStart , 60);
 
 
 	}
