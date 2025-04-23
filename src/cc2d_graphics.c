@@ -6,19 +6,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <unistd.h>
 #include "cc2d_graphics.h"
+#include "cc2d_font.h"
 
-void loadBar()
-{
-	// Boucle pour afficher la barre de chargement
-    for (int i = 0; i < 10; i++) 
-    {
-        // Affiche le caractère en vert clair
-        printf("\033[1;92m▓\033[0m");  // \033[1;92m est pour le vert clair (bright green)
-        fflush(stdout);  // Assure que le caractère s'affiche sans délai
-        usleep(100000);  // Pause de 100000 microsecondes (0,1 seconde)
-    }
-	printf("\n");
-}
 
 int cc2d_init()
 {
@@ -125,6 +114,7 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 		printf("✅ TTF initialisée avec succés !\n");
 	}
 
+	
 	SDL_SetRenderDrawBlendMode(*renderer,SDL_BLENDMODE_BLEND);
 }
 
@@ -214,13 +204,15 @@ void cc2d_fpsLimiter(Uint32 frameStart , int fps)
 {
 	//le temps écoulé pour afficher une image
 	Uint32 frameTime = SDL_GetTicks() - frameStart;
+//	printf("frameTime = %.6f\n",(double)frameTime / 1000 );
 
-	//si le temps écoulé est inferieur 1000 miliseconde (une sec ) / 60;
-	if(frameTime < (1000.0 / fps ))
+	//temps par frame rechercher 
+	Uint32 targetFrameTime = 1000.0 / fps;
+
+	if(frameTime < targetFrameTime)
 	{
-		//alors le delay d'attentes pour afficher une image et limiter a 60fps =
-		Uint32 delay = (1000.0 / fps ) - frameTime;
-		if(delay > 0 )
+		Uint32 delay = targetFrameTime - frameTime;
+		if(delay > 0)
 		{
 			SDL_Delay(delay);
 		}
@@ -230,39 +222,103 @@ void cc2d_fpsLimiter(Uint32 frameStart , int fps)
 void cc2d_Precise_FpsLimiter(Uint64 precise_fst , int fps)
 {
 	//Nombre de ticks emis pendant une frame
-	Uint64 frameTime = SDL_GetPerformanceCounter() - precise_fst;
+	Uint64 frameTime = SDL_GetPerformanceCounter() - precise_fst; 
+	//on convertis le frame time en senconde
+	double sFrameTime =(double)frameTime / SDL_GetPerformanceFrequency();
 
-	//convertie en seconde
-	double sFrameTime = (double)frameTime / SDL_GetPerformanceFrequency();
+//	printf("frameTime = %.6f\n",sFrameTime);
 
-	//si le temps écoulé est inferieur 1000 miliseconde (une sec ) / 60;
-	if(sFrameTime < (1000.000000/ fps ))
+	double targetFrameTime = 1.0 / fps;
+
+	if(sFrameTime < targetFrameTime)
 	{
-		//alors le delay d'attentes pour afficher une image et limiter a 60fps =
-		Uint64 delay = (1000.000000/ fps ) - sFrameTime;
-		if(delay > 0 )
+		//on convertie le delay en milliseconde pour le passer a SDL_delay
+		double delaySeconde = targetFrameTime - sFrameTime;
+		Uint32 delayMili = (Uint32)(delaySeconde *1000);
+		if(delayMili > 0)
 		{
-			SDL_Delay(delay);
+			SDL_Delay(delayMili);
 		}
+
 	}
 }
 
 
+void cc2d_printPerf(const char* perf,double Vperf,SDL_Renderer* renderer,TTF_Font* font)
+{
+
+	if(strcmp(perf,"timer")== 0)
+	{
+                 //affichage timer 
+		char elpdTime[100];
+		sprintf(elpdTime,"TIME : %.6f",Vperf); 
+	        SDL_Texture* texElapsedTime = cc2d_textureTexte(elpdTime,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(texElapsedTime,renderer,1700,0,150,100,255);
+		SDL_DestroyTexture(texElapsedTime);
+		
+	}
+	else if(strcmp(perf,"delta time") == 0)
+	{
+		//affichage delta time
+		char timeDt[100];
+		sprintf(timeDt,"DELTA : %.6f",Vperf); 
+	        SDL_Texture* tex_DTime = cc2d_textureTexte(timeDt,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_DTime,renderer,1700,100,150,100,255);
+		SDL_DestroyTexture(tex_DTime);
+	}	
+	else if(strcmp(perf,"fps")== 0)
+	{
+                //affichage des fps
+		char fps[100];
+		sprintf(fps,"FPS : %.6f", 1.0 / Vperf); 
+	        SDL_Texture* tex_fps = cc2d_textureTexte(fps,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_fps,renderer,1700,200,150,100,255);
+		SDL_DestroyTexture(tex_fps);
+         }       
+	else if(strcmp(perf,"Ptimer") == 0)
+	{
+		//affichage precis du timer 
+		char P_elapse[100];
+		sprintf(P_elapse,"TIME : %.6f",Vperf); 
+	        SDL_Texture* P_tex_ElapsedTime = cc2d_textureTexte(P_elapse,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(P_tex_ElapsedTime,renderer,1700,300,150,100,255);
+		SDL_DestroyTexture(P_tex_ElapsedTime);
+	}
+	else if(strcmp(perf,"Pdelta time") == 0)
+	{
+                //affichage precis du  delta time
+		char P_Dt[100];
+		sprintf(P_Dt,"DELTA : %.6f",Vperf); 
+	        SDL_Texture* tex_P_Dt = cc2d_textureTexte(P_Dt,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_P_Dt,renderer,1700,400,150,100,255);
+		SDL_DestroyTexture(tex_P_Dt);
+	}		
+	else if(strcmp(perf,"Pfps") == 0)
+	{
+                //affichage precis des fps
+		char P_fps[100];
+		sprintf(P_fps,"FPS : %.6f", 1.0 / Vperf); 
+	        SDL_Texture* tex_P_fps = cc2d_textureTexte(P_fps,renderer,font,300,100,255,255,255,255);
+		cc2d_Draw(tex_P_fps,renderer,1700,500,150,100,255);
+		SDL_DestroyTexture(tex_P_fps);
+	}
+	else
+	{
+		printf("unknown mode\n");
+	}
+}
+	
+void loadBar()
+{
+	// Boucle pour afficher la barre de chargement
+    for (int i = 0; i < 10; i++) 
+    {
+        // Affiche le caractère en vert clair
+        printf("\033[1;92m▓\033[0m");  // \033[1;92m est pour le vert clair (bright green)
+        fflush(stdout);  // Assure que le caractère s'affiche sans délai
+        usleep(100000);  // Pause de 100000 microsecondes (0,1 seconde)
+    }
+	printf("\n");
+}
 
 	
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
