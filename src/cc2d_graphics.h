@@ -12,7 +12,7 @@ int cc2d_beginDraw(SDL_Renderer* renderer);
 
 void cc2d_enddraw(SDL_Renderer* renderer);
 
-int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Window** window);
+int cc2d_init_window(char* titre,int width,int height,int gameWidth,int gameHeigh,SDL_Renderer** renderer,SDL_Window** window);
 
 SDL_Texture* cc2d_loadImage(SDL_Renderer *renderer,const char* path);
 
