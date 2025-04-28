@@ -61,7 +61,7 @@ void cc2d_close(SDL_Renderer* renderer,SDL_Window* window)
 }
 
 
-int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Window** window)
+int cc2d_init_window(char* titre,int width,int height,int gameWidth,int gameHeight,SDL_Renderer** renderer,SDL_Window** window)
 {
 
 //window = l'adresse du pointeur 
@@ -72,9 +72,9 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 			"Test window",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			w,
-			h,
-			SDL_WINDOW_SHOWN
+			width,
+			height,
+			SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
 			);
 
 	if(*window == NULL)
@@ -115,6 +115,9 @@ int cc2d_init_window(char* titre ,int w ,int h,SDL_Renderer** renderer,SDL_Windo
 	}
 
 	
+	SDL_SetWindowMinimumSize(*window,gameWidth,gameHeight);
+        SDL_RenderSetLogicalSize(*renderer,gameWidth,gameHeight);
+	SDL_RenderSetIntegerScale(*renderer,SDL_TRUE);
 	SDL_SetRenderDrawBlendMode(*renderer,SDL_BLENDMODE_BLEND);
 }
 

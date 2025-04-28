@@ -16,14 +16,19 @@ int main( int agrc , const char argv [])
 	SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
 
+	int gameWidth = 250;
+	int gameHeight = 250;
+
 
 	cc2d_init();
-	cc2d_init_window("window test" ,2000,1000,&renderer,&window);
+	cc2d_init_window("window test" ,1000,1000, gameWidth,gameHeight,&renderer,&window);
 	
 	//intialisation graphics
 	SDL_Texture* texplanet = cc2d_loadImage(renderer,"../img/planet.png");
 	int xp = 0;
 	int yp = 0;
+	int planetWidth = 100 ;
+	int planetHeight = 100 ;
 
 	//initialisation font et textes
 	TTF_Font* font = cc2d_loadFont("../font/PixelMaster.ttf",50);
@@ -65,30 +70,46 @@ int main( int agrc , const char argv [])
 		
 		//chargement du contenue
 		SDL_SetRenderDrawColor(renderer,255,0,255,255);      //dessine la ligne
-		SDL_RenderDrawLine(renderer,0,0,2000,1000);
+		SDL_RenderDrawLine(renderer,0,0,250,250);
 
-		cc2d_Draw(texplanet,renderer,xp,yp,150,150,255);     //affiche la planet 
-		cc2d_Draw(titre,renderer,300,500,200,100,255);
+		cc2d_Draw(texplanet,renderer,xp,yp,planetWidth,planetHeight,255);     //affiche la planet 
+		cc2d_Draw(titre,renderer,100,100,50,50,255);
 
-		cc2d_printPerf("fps",deltaTime,renderer,font);
+		//cc2d_printPerf("fps",deltaTime,renderer,font);
 		
 		
-		if(cc2d_downKey(SDL_SCANCODE_D))
-		{
-			xp++;
-		}
-		if(cc2d_downKey(SDL_SCANCODE_A))
-		{
-			xp--;
-		}
-		if(cc2d_downKey(SDL_SCANCODE_S))
-		{
-			yp++;
-		}
-		if(cc2d_downKey(SDL_SCANCODE_W))
-		{
-			yp--;
-		}
+			if(cc2d_downKey(SDL_SCANCODE_D))
+			{
+				if(xp < gameWidth - planetWidth) 
+				{
+					xp++;
+				}
+			}
+			if(cc2d_downKey(SDL_SCANCODE_A))
+			{
+				if(xp > 0)
+				{
+					xp--;
+				}
+			}
+			if(cc2d_downKey(SDL_SCANCODE_S))
+			{
+
+				if(yp < gameWidth - planetWidth ) 
+				{
+
+					yp++;
+				}
+			}
+			if(cc2d_downKey(SDL_SCANCODE_W))
+			{
+
+				if(yp > 0)
+				{
+					yp--;
+				}
+			}
+
 
 		cc2d_enddraw(renderer);    //affiche le resultat
 
